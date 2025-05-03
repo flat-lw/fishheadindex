@@ -1,2 +1,2 @@
 # fishheadindex
-魚等目録
+魚頭目録
