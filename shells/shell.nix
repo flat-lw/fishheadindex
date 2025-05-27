@@ -1,9 +1,9 @@
 {packages ? import <nixpkgs> {} }:
 
 packages.mkShell {
-  buildinputs = with packages; [
+  buildInputs = with packages; [
     git
-    python313
+    (python312.withPackages(ps: with ps;[gspread numpy pandas]))
   ];
 
   pure = true;
