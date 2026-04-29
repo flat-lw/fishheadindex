@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🎣 Fish Omikuji</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      height: 100vh; margin: 0;
+      background: #0a1628; color: #fff;
+    }
+    .msg { font-size: 1.2rem; text-align: center; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="msg" id="msg">魚頭歓迎...</div>
+  <script>
+    (async () => {
+      const JSON_URL = "https://flat-lw.github.io/fishheadindex/fishList.json";
+      const BASE_URL = "https://vrchat.com/home/avatar/";
+      const msg = document.getElementById("msg");
+
+      try {
+        const res = await fetch(JSON_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+
+        // fishhead オブジェクトから ID を持つエントリだけ抽出
+        const entries = Object.values(data.fishhead || {})
+          .filter(e => e && e.ID);
+        if (entries.length === 0) throw new Error("アバターが見つかりません");
+
+        // 直前と同じ結果を避ける
+        const last = sessionStorage.getItem("lastFishId");
+        let pool = entries.filter(e => e.ID !== last);
+        if (pool.length === 0) pool = entries;
+
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        sessionStorage.setItem("lastFishId", pick.ID);
+
+        msg.textContent = `🐟 ${pick.name} に決定！`;
+        setTimeout(() => location.replace(BASE_URL + pick.ID), 800);
+      } catch (err) {
+        msg.textContent = "⚠️ " + err.message;
+        console.error(err);
+      }
+    })();
+  </script>
+  <noscript><p>JavaScriptを有効にしてください。</p></noscript>
+</body>
+</html>
