@@ -14,8 +14,8 @@ with open(csv_filename, mode="r", encoding="utf-8") as csv_file:
 
     for row in reader:
             if row[7] != "":
-            number = row[0]  # "number" は 1列目にあると仮定
-            data["fishhead"][number] = {
+                number = row[0]  # "number" は 1列目にあると仮定
+                data["fishhead"][number] = {
                 "name": row[1],
                 "day": row[3],  # 空のカラム (index=2) をスキップ
                 "auther": row[4],
@@ -23,7 +23,7 @@ with open(csv_filename, mode="r", encoding="utf-8") as csv_file:
                 "model": row[6],
                 "ID": row[7],
                 "performance": row[9]  # "IRL" (index=8) をスキップ
-            }
+                }
 
 # JSON ファイルに保存
 with open(json_filename, mode="w", encoding="utf-8") as json_file:
